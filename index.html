@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css" />
+
+    <title>Whoayo Games</title>
+  </head>
+  <body>
+    <!-- START UI -->
+    <div class="start-ui-container">
+      <h1 id="initial-title" class="initial-ui-title">🚀 Select a game!</h1>
+      <div id="btn-wrap">
+        <button
+          id="start-game"
+          data-difficulty="medium"
+          data-gametype="bugs"
+          class="initial-ui start-btn"
+        >
+          🦟 Bug Attack
+        </button>
+        <button
+          id="start-game"
+          data-difficulty="medium"
+          data-gametype="gems"
+          class="initial-ui start-btn"
+        >
+          💎 Gem Jam
+        </button>
+      </div>
+
+      <div class="difficulty-container">
+        <label for="difficulty">Game Difficulty</label>
+        <select name="difficulty" id="difficulty-select" value="medium">
+          <option value="easy">Easy</option>
+          <option selected value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+
+    <div id="dead-screen" class="dead-screen final-screen">you ded</div>
+    <div id="win-screen" class="win-screen final-screen">you win</div>
+
+    <!-- HEALTH BAR -->
+    <div id="health-container" class="health-container">
+      <label for="health">Player Health</label>
+      <progress class="health" id="health" value="100" max="100"></progress>
+    </div>
+    <!-- HEALTH BAR -->
+    <div id="gems-container" class="health-container">
+      <label for="gems">Gems Collected</label>
+      <progress class="health" id="gem-bar" value="0" max="100"></progress>
+      <!-- TODO: Add timer here? -->
+    </div>
+    <div id="timer-container" class="timer-container">
+      <label class="timer-label" for="timer">Current Time</label>
+      <div class="timer" id="timer">00:00</div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+    <script>
+      const select = document.getElementById('difficulty-select');
+      const btns = document.querySelectorAll('.start-btn');
+
+      if (select) {
+        select.addEventListener('change', (e) => {
+          if (!btns) return;
+          btns.forEach((btn) => btn.setAttribute('data-difficulty', e.target.value));
+        });
+      }
+    </script>
+  </body>
+</html>
