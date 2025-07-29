@@ -13,15 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   position: relative;
   display: flex;
@@ -30,38 +21,12 @@ body {
   justify-content: center;
   margin: 0;
   height: calc(100vh);
+  background-image: url('./sprites/Water.png');
+  background-repeat: repeat;
 }
 
 h1 {
   font-size: 3.2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 button {
@@ -81,19 +46,6 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 .start-ui-container {
@@ -129,6 +81,10 @@ button:focus-visible {
   border-color: #1a1a1a;
 }
 
+canvas {
+  border-radius: 8px;
+}
+
 progress {
   display: block;
 }
@@ -156,19 +112,20 @@ progress.low-health {
 .final-screen {
   position: absolute;
   display: none;
+  /* display: flex; */
   top: 0;
   left: 0;
-  opacity: 40%;
+  opacity: 88%;
   background-color: black;
   height: 100svh;
   width: 100svw;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .win-screen {
-  /* display: none;
-  opacity: 50%;
-  height: 100vh;
-  width: 100vw; */
+  display: none;
 }
 
 .timer-container {
@@ -187,4 +144,8 @@ progress.low-health {
   font-family: monospace;
   font-size: 18px;
   text-align: center;
+}
+
+.score-container {
+  margin-bottom: 24px;
 }

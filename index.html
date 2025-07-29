@@ -42,8 +42,28 @@
     </div>
     <canvas id="canvas"></canvas>
 
-    <div id="dead-screen" class="dead-screen final-screen">you ded</div>
-    <div id="win-screen" class="win-screen final-screen">you win</div>
+    <div id="dead-screen" class="dead-screen final-screen">
+      <h1>You Died</h1>
+      <div class="score-container">
+        <span id="score-text"></span>
+        <span id="score"></span>
+      </div>
+      <div>
+        <button id="restart-btn">Play Again</button>
+        <button id="reset-btn">Reset Game</button>
+      </div>
+    </div>
+    <div id="win-screen" class="win-screen final-screen">
+      <h1>You Win</h1>
+      <div class="score-container">
+        <span id="score-text" class="score-header"></span>
+        <span id="score" class="score"></span>
+      </div>
+      <div>
+        <button id="restart-btn">Play Again</button>
+        <button id="reset-btn">Reset Game</button>
+      </div>
+    </div>
 
     <!-- HEALTH BAR -->
     <div id="health-container" class="health-container">
@@ -54,7 +74,6 @@
     <div id="gems-container" class="health-container">
       <label for="gems">Gems Collected</label>
       <progress class="health" id="gem-bar" value="0" max="100"></progress>
-      <!-- TODO: Add timer here? -->
     </div>
     <div id="timer-container" class="timer-container">
       <label class="timer-label" for="timer">Current Time</label>

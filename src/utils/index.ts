@@ -7,6 +7,9 @@ export const hideInitialUi = (gameType: GameType) => {
   const timerContainer = document.getElementById('timer-container') as HTMLBodyElement;
   timerContainer.style.display = 'flex';
   document
+    .querySelectorAll('.final-screen')
+    .forEach((ui) => ((ui as HTMLElement).style.display = 'none'));
+  document
     .querySelectorAll('.start-ui-container')
     .forEach((ui) => ((ui as HTMLElement).style.display = 'none'));
 };

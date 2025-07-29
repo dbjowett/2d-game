@@ -1,6 +1,6 @@
-import type { GameType } from '../main';
 import blonde from '../sprites/blonde_boy.png';
 import { keys } from '../utils/';
+import type { GameState } from './Game';
 
 const Direction = {
   Down: 0,
@@ -9,7 +9,9 @@ const Direction = {
   Up: 3,
 } as const;
 
-export class Player {
+type DirectionType = 0 | 1 | 2 | 3;
+
+export abstract class BasePlayer {
   image = new Image();
   imageLoaded = false;
   x: number;
@@ -24,17 +26,17 @@ export class Player {
 
   health: number;
 
-  direction = 0;
+  direction: DirectionType = 0;
   frameX = 0;
   gameFrame = 0;
   staggerFrames = 10;
   isMoving = false;
 
-  constructor(x: number, y: number, gameType: GameType) {
+  constructor(x: number, y: number, startHealth: number) {
     this.x = x;
     this.y = y;
-    this.health = gameType === 'bugs' ? 100 : 1;
-    this.direction = Direction['Down'];
+    this.health = startHealth;
+
     this.image.src = blonde;
     this.image.onload = () => (this.imageLoaded = true);
   }
@@ -44,9 +46,7 @@ export class Player {
     if (add) this.health = this.health += add;
   }
 
-  checkHealth(handleDeath: () => void) {
-    this.health <= 0 && handleDeath();
-  }
+  abstract checkHealth(handleDeath: (status: GameState) => void): void;
 
   update(canvas: HTMLCanvasElement) {
     this.isMoving = false;

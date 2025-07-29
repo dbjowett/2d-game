@@ -1,4 +1,4 @@
-import type { Player } from './Player';
+import type { BasePlayer } from './BasePlayer';
 
 export abstract class BaseEntity {
   x: number;
@@ -32,7 +32,7 @@ export abstract class BaseEntity {
     this.canvasWidth = canvas.width;
   }
 
-  checkCollision(player: Player) {
+  checkCollision(player: BasePlayer) {
     return (
       this.x < player.x + player.frameWidth &&
       this.x + this.width > player.x &&
@@ -41,7 +41,7 @@ export abstract class BaseEntity {
     );
   }
 
-  abstract update(player: Player, removeEntity: () => void): void;
+  abstract update(player: BasePlayer, removeEntity: () => void): void;
 
   draw(ctx: CanvasRenderingContext2D) {
     if (!ctx || !this.imageLoaded) return;

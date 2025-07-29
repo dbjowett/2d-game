@@ -1,6 +1,6 @@
 import enemy from '../sprites/beetle.png';
 import { BaseEntity } from './BaseEntity';
-import type { Player } from './Player';
+import type { BasePlayer } from './BasePlayer';
 const healthBar = document.getElementById('health') as HTMLProgressElement;
 
 export class Enemy extends BaseEntity {
@@ -16,7 +16,7 @@ export class Enemy extends BaseEntity {
     this.image.onload = () => (this.imageLoaded = true);
   }
 
-  update(player: Player, _removeEntity?: () => void) {
+  update(player: BasePlayer, _removeEntity?: () => void) {
     if (this.checkCollision(player)) {
       player.updateHealth({ subtract: 1 });
       healthBar.value = player.health;

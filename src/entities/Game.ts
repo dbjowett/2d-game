@@ -1,9 +1,10 @@
 import type { Difficulty, GameType } from '../main';
 import grass from '../sprites/grass.png';
 import { msToSec } from '../utils';
+import { BugGamePlayer } from './BugGamePlayer';
 import { Enemy } from './Enemy';
 import { Gem } from './Gem';
-import { Player } from './Player';
+import { GemGamePlayer } from './GemGamePlayer';
 
 const winScreen = document.getElementById('win-screen') as HTMLElement;
 const deadScreen = document.getElementById('dead-screen') as HTMLElement;
@@ -11,9 +12,21 @@ const timer = document.getElementById('timer') as HTMLDivElement;
 
 type GameTime = { start: number; end: number | null };
 
-// ** Constants ** //
-const playerStartingPoint = { x: 0, y: 0 };
 const borderThickness = 200;
+// ** Constants ** //
+const playerStartingPoint: Record<GameType, Record<'x' | 'y' | 'health', number>> = {
+  bugs: {
+    x: 0,
+    y: 0,
+    health: 100,
+  },
+  gems: {
+    x: 0,
+    y: 0,
+    health: 0,
+  },
+};
+
 const difficultyMap: Record<GameType, Record<Difficulty, number>> = {
   bugs: {
     easy: 40,
@@ -27,7 +40,7 @@ const difficultyMap: Record<GameType, Record<Difficulty, number>> = {
   },
 };
 
-type GameState = 'playing' | 'lost' | 'won';
+export type GameState = 'playing' | 'lost' | 'won';
 
 export class Game {
   image = new Image();
@@ -36,7 +49,7 @@ export class Game {
   canvasWidth: number;
   canvasHeight: number;
   ctx: CanvasRenderingContext2D;
-  player: Player;
+  player: BugGamePlayer | GemGamePlayer;
   // lastFrameTime: number;
   wallThickness = 50;
   entities: Enemy[];
@@ -63,7 +76,7 @@ export class Game {
     if (!ctx) throw new Error('No canvas');
     this.ctx = ctx;
     this.image.src = grass;
-    this.player = new Player(playerStartingPoint.x, playerStartingPoint.y, this.gameType); // player starting location
+    this.player = this.getPlayer(); // player starting location
     this.image.onload = () => (this.imageLoaded = true);
 
     window.addEventListener('resize', () => {
@@ -72,6 +85,18 @@ export class Game {
       this.canvas.width = this.canvasWidth;
       this.canvas.height = this.canvasHeight;
     });
+  }
+
+  private getPlayer() {
+    const { x, y, health } = playerStartingPoint[this.gameType];
+    switch (this.gameType) {
+      case 'bugs':
+        return new BugGamePlayer(x, y, health);
+      case 'gems':
+        return new GemGamePlayer(x, y, health);
+      default:
+        throw new Error('No game type found!');
+    }
   }
 
   private createEntities() {
@@ -89,9 +114,9 @@ export class Game {
 
   showGameOverScreen() {
     if (this.gameState === 'won') {
-      winScreen.style.display = 'block';
+      winScreen.style.display = 'flex';
     } else {
-      deadScreen.style.display = 'block';
+      deadScreen.style.display = 'flex';
     }
   }
 
@@ -104,10 +129,9 @@ export class Game {
 
   addBackground() {
     const pattern = this.ctx.createPattern(this.image, 'repeat');
-    if (pattern) {
-      this.ctx.fillStyle = pattern;
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    }
+    if (!pattern) return;
+    this.ctx.fillStyle = pattern;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   updateGameStatus(gameState: GameState) {
@@ -128,7 +152,7 @@ export class Game {
       entity.draw(this.ctx);
     });
 
-    this.player.checkHealth(() => this.updateGameStatus('lost'));
+    this.player.checkHealth((state: GameState) => this.updateGameStatus(state));
     this.player.draw(this.ctx);
     this.player.update(this.canvas);
     requestAnimationFrame(this.gameLoop);

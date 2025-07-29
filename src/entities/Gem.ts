@@ -1,6 +1,6 @@
 import gems from '../sprites/gems.png';
 import { BaseEntity } from './BaseEntity';
-import type { Player } from './Player';
+import type { BugGamePlayer } from './BugGamePlayer';
 const gemBar = document.getElementById('gem-bar') as HTMLProgressElement;
 
 export class Gem extends BaseEntity {
@@ -15,7 +15,7 @@ export class Gem extends BaseEntity {
     this.image.onload = () => (this.imageLoaded = true);
   }
 
-  update(player: Player, removeEntity: () => void) {
+  update(player: BugGamePlayer, removeEntity: () => void) {
     if (this.checkCollision(player)) {
       player.updateHealth({ add: 5 });
       removeEntity();
