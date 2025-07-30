@@ -21,7 +21,7 @@ export abstract class BaseEntity {
   width: number = 30;
   height: number = 30;
 
-  staggerFrames = 10;
+  staggerFrames = 10; // flap speed
   gameFrame = 0;
   canvasWidth: number;
 
@@ -61,11 +61,7 @@ export abstract class BaseEntity {
     );
 
     if (this.gameFrame % this.staggerFrames === 0) {
-      if (this.frameX < 3) {
-        this.frameX++;
-      } else {
-        this.frameX = 0;
-      }
+      this.frameX = this.frameX === 3 ? 0 : this.frameX + 1; // 4 frames per row
     }
     this.gameFrame++;
   }

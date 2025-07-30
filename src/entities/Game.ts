@@ -163,12 +163,15 @@ export class Game {
       this.showGameOverScreen();
       return;
     }
-    this.updateTime();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.updateTime();
     this.addBackground();
     if (this.gameType === 'bugs') this.addCrown();
 
+    // let bugLocations: Array<{ x: number; y: number; height: number; width: number }> = [];
     this.entities.forEach((entity) => {
+      // bugLocations.push({ x: entity.x, y: entity.y, width: entity.width, height: entity.height });
       entity.update(this.player, () => this.removeEntity(entity.id));
       entity.draw(this.ctx);
     });
