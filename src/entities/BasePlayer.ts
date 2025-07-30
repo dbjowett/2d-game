@@ -95,9 +95,8 @@ export abstract class BasePlayer {
       this.renderHeight // canvas render width/height
     );
 
-    // Animate only when moving
     if (this.gameFrame % this.staggerFrames === 0 && this.isMoving) {
-      this.frameX = (this.frameX + 1) % 4; // assuming 4 frames per row
+      this.frameX = (this.frameX + 1) % 4; // 4 frames per row
     }
     this.gameFrame++;
   }

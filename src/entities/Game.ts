@@ -1,4 +1,5 @@
 import type { Difficulty, GameType } from '../main';
+import chest from '../sprites/chest.png';
 import grass from '../sprites/grass.png';
 import { msToSec } from '../utils';
 import { BugGamePlayer } from './BugGamePlayer';
@@ -44,6 +45,7 @@ export type GameState = 'playing' | 'lost' | 'won';
 
 export class Game {
   image = new Image();
+  goalImage = new Image();
   imageLoaded = false;
   canvas: HTMLCanvasElement;
   canvasWidth: number;
@@ -76,6 +78,7 @@ export class Game {
     if (!ctx) throw new Error('No canvas');
     this.ctx = ctx;
     this.image.src = grass;
+    this.goalImage.src = chest;
     this.player = this.getPlayer(); // player starting location
     this.image.onload = () => (this.imageLoaded = true);
 
@@ -134,6 +137,23 @@ export class Game {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  addCrown() {
+    const scale = 1.4;
+    const crownWidth = 16;
+    const crownHeight = 14;
+    this.ctx.drawImage(
+      this.goalImage,
+      0,
+      0,
+      crownWidth,
+      crownHeight,
+      this.canvas.width - crownWidth * scale,
+      this.canvas.height - crownHeight * scale,
+      crownWidth * scale,
+      crownHeight * scale
+    );
+  }
+
   updateGameStatus(gameState: GameState) {
     this.gameState = gameState;
   }
@@ -146,6 +166,7 @@ export class Game {
     this.updateTime();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.addBackground();
+    if (this.gameType === 'bugs') this.addCrown();
 
     this.entities.forEach((entity) => {
       entity.update(this.player, () => this.removeEntity(entity.id));

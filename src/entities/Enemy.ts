@@ -26,13 +26,15 @@ export class Enemy extends BaseEntity {
         healthBar.classList.remove('low-health');
       }
     }
-    if (this.x > this.canvasWidth) {
-      this.x = -this.width; // move enemy back to beginning -width
-      return;
+    // left side of bug + its width >= width of canvas (ie right side of bug is touching right side of canvas)
+    if (this.x + this.width >= this.canvasWidth) {
+      this.x = this.canvasWidth - this.width;
+      this.speed *= -1;
     }
-    if (this.x < -this.width) {
-      this.x = this.canvasWidth;
-      return;
+    // left side of bug is touching left side of canvas
+    if (this.x <= 0) {
+      this.x = 0;
+      this.speed *= -1;
     }
 
     this.x += this.speed;
