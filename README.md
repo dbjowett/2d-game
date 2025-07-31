@@ -1,5 +1,13 @@
 # 🎮 Whoyaho Coding Test
 
+⚡️ [View Live](https://2dgame.danieljowett.com)
+
+### Deployed via AWS
+
+- S3
+- Cloudfront
+- Route 53
+
 ## 🛠️ Before You Start
 
 ### 1. Clone the repository
