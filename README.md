@@ -3,7 +3,7 @@
 ⚡️ [View Live](https://2dgame.danieljowett.com)
 
 ### Deployed via AWS
-
+- Github Actions
 - S3
 - Cloudfront
 - Route 53
