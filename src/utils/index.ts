@@ -1,4 +1,4 @@
-import type { GameType } from '../main';
+import type { GameType } from '../types';
 
 export const hideInitialUi = (gameType: GameType) => {
   const health = document.getElementById('health-container') as HTMLDivElement;
@@ -21,6 +21,7 @@ export const keys = {
 };
 
 type keyType = keyof typeof keys;
+
 export const addKeyboardListeners = () => {
   window.addEventListener('keydown', ({ key }) => {
     if (!Object.keys(keys).includes(key)) return;

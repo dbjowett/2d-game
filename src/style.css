@@ -24,10 +24,15 @@ body {
   background-image: url('./sprites/Water.png');
   background-repeat: repeat;
 }
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
+}
 
 h1 {
   font-size: 3.2em;
-  margin: 0;
 }
 
 button {
@@ -168,4 +173,28 @@ progress.low-health {
 
 .difficulty-container {
   height: 60px;
+}
+
+.rules-header-title {
+  margin-top: 6rem;
+  border-bottom: 3px solid black;
+}
+
+.rulesContainer {
+  display: flex;
+  gap: 40px;
+}
+
+.rule {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+}
+.rule ul {
+  padding: 0 40px;
+}
+
+.rule-header {
+  padding: 10px 20px;
+  font-size: 20px;
+  border-bottom: 1px solid rgb(255, 255, 255);
 }

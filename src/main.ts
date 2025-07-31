@@ -1,8 +1,6 @@
 import { Game } from './entities/Game';
+import type { Difficulty, GameType } from './types';
 import { addKeyboardListeners, hideInitialUi } from './utils/';
-
-export type Difficulty = 'easy' | 'medium' | 'hard';
-export type GameType = 'gems' | 'bugs';
 
 const startButtonGames = document.querySelectorAll('#start-game');
 const restartBtn = document.querySelectorAll('#restart-btn');
