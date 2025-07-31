@@ -48,6 +48,7 @@ export abstract class BasePlayer {
 
   abstract checkHealth(handleDeath: (status: GameState) => void): void;
 
+  // updates the player location and prevents them from falling off
   update(canvas: HTMLCanvasElement) {
     this.isMoving = false;
     // TODO: fix arbitrary numbers for walls
@@ -77,6 +78,7 @@ export abstract class BasePlayer {
     }
   }
 
+  // Draws player onto canvas
   draw(ctx: CanvasRenderingContext2D) {
     if (!ctx || !this.imageLoaded) return;
 

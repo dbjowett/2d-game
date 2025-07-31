@@ -11,11 +11,11 @@
   <body>
     <!-- START UI -->
     <div class="start-ui-container">
-      <h1 id="initial-title" class="initial-ui-title">🚀 Select a game!</h1>
+      <h1 id="initial-title" class="initial-ui-title">🎮 Select a game!</h1>
       <div id="btn-wrap">
         <button
           id="start-game"
-          data-difficulty="medium"
+          data-difficulty="hard"
           data-gametype="bugs"
           class="initial-ui start-btn"
         >
@@ -23,7 +23,7 @@
         </button>
         <button
           id="start-game"
-          data-difficulty="medium"
+          data-difficulty="hard"
           data-gametype="gems"
           class="initial-ui start-btn"
         >
@@ -33,31 +33,30 @@
 
       <div class="difficulty-container">
         <label for="difficulty">Game Difficulty</label>
-        <select name="difficulty" id="difficulty-select" value="medium">
+        <select name="difficulty" id="difficulty-select" value="hard">
           <option value="easy">Easy</option>
-          <option selected value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option value="medium">Medium</option>
+          <option selected value="hard">Hard</option>
         </select>
       </div>
     </div>
     <canvas id="canvas"></canvas>
 
-    <div id="dead-screen" class="dead-screen final-screen">
-      <h1>You Died</h1>
+    <div id="final-screen" class="final-screen">
+      <!-- You Died || You Won -->
+      <h1 id="title"></h1>
       <div class="score-container">
-        <span id="score-text"></span>
-        <span id="score"></span>
-      </div>
-      <div>
-        <button id="restart-btn">Play Again</button>
-        <button id="reset-btn">Reset Game</button>
-      </div>
-    </div>
-    <div id="win-screen" class="win-screen final-screen">
-      <h1>You Win</h1>
-      <div class="score-container">
-        <span id="score-text" class="score-header"></span>
-        <span id="score" class="score"></span>
+        <div>
+          <!-- Time -->
+          <span id="score-header" class="score-header">Time:</span>
+          <!-- Score -->
+          <span id="score" class="score"></span>
+        </div>
+        <!-- High Score -->
+        <div>
+          <span id="high-score-header" class="high-score-header"></span>
+          <span id="high-score" class="high-score"></span>
+        </div>
       </div>
       <div>
         <button id="restart-btn">Play Again</button>
@@ -70,11 +69,12 @@
       <label for="health">Player Health</label>
       <progress class="health" id="health" value="100" max="100"></progress>
     </div>
-    <!-- HEALTH BAR -->
+    <!-- GEM BAR -->
     <div id="gems-container" class="health-container">
       <label for="gems">Gems Collected</label>
       <progress class="health" id="gem-bar" value="0" max="100"></progress>
     </div>
+    <!-- TIMER -->
     <div id="timer-container" class="timer-container">
       <label class="timer-label" for="timer">Current Time</label>
       <div class="timer" id="timer">00:00</div>
@@ -82,13 +82,27 @@
 
     <script type="module" src="/src/main.ts"></script>
     <script>
+      const DIFF_KEY = 'selected-difficulty';
       const select = document.getElementById('difficulty-select');
       const btns = document.querySelectorAll('.start-btn');
 
+      const setDifficulty = (diff) => {
+        btns.forEach((btn) => btn.setAttribute('data-difficulty', diff));
+        select.value = diff;
+      };
+
+      window.onload = () => {
+        const userDifficulty = window.localStorage.getItem(DIFF_KEY);
+        if (!btns || !select) return;
+        setDifficulty(userDifficulty || 'hard');
+        select.style.display = 'block';
+      };
+
       if (select) {
         select.addEventListener('change', (e) => {
-          if (!btns) return;
-          btns.forEach((btn) => btn.setAttribute('data-difficulty', e.target.value));
+          if (!btns || !select) return;
+          setDifficulty(e.target.value);
+          window.localStorage.setItem(DIFF_KEY, e.target.value);
         });
       }
     </script>

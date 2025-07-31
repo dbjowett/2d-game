@@ -1,47 +1,25 @@
+import { difficultyMap, gameBorderThickness, playerStartingPoint } from '../constants';
 import type { Difficulty, GameType } from '../main';
 import chest from '../sprites/chest.png';
 import grass from '../sprites/grass.png';
-import { msToSec } from '../utils';
+import { msToText } from '../utils';
 import { BugGamePlayer } from './BugGamePlayer';
+import { Crown } from './Crown';
 import { Enemy } from './Enemy';
 import { Gem } from './Gem';
 import { GemGamePlayer } from './GemGamePlayer';
 
-const winScreen = document.getElementById('win-screen') as HTMLElement;
-const deadScreen = document.getElementById('dead-screen') as HTMLElement;
+// Types
+export type GameTime = { start: number; end: number };
+export type GameState = 'playing' | 'lost' | 'won';
+
+// Elements
+const finalScreen = document.getElementById('final-screen') as HTMLElement;
 const timer = document.getElementById('timer') as HTMLDivElement;
 
-type GameTime = { start: number; end: number | null };
-
-const borderThickness = 200;
-// ** Constants ** //
-const playerStartingPoint: Record<GameType, Record<'x' | 'y' | 'health', number>> = {
-  bugs: {
-    x: 0,
-    y: 0,
-    health: 100,
-  },
-  gems: {
-    x: 0,
-    y: 0,
-    health: 0,
-  },
-};
-
-const difficultyMap: Record<GameType, Record<Difficulty, number>> = {
-  bugs: {
-    easy: 40,
-    medium: 80,
-    hard: 200,
-  },
-  gems: {
-    easy: 200,
-    medium: 100,
-    hard: 40,
-  },
-};
-
-export type GameState = 'playing' | 'lost' | 'won';
+// Constants
+const HIGH_SCORE_BUGS = 'high-score-bugs';
+const HIGH_SCORE_GEMS = 'high-score-gems';
 
 export class Game {
   image = new Image();
@@ -52,27 +30,26 @@ export class Game {
   canvasHeight: number;
   ctx: CanvasRenderingContext2D;
   player: BugGamePlayer | GemGamePlayer;
-  // lastFrameTime: number;
   wallThickness = 50;
   entities: Enemy[];
   gameState: GameState;
   difficulty: Difficulty;
   gameType: GameType;
   gameTime: GameTime;
+  crown: Crown | null = null;
 
   constructor(canvas: HTMLCanvasElement, difficulty: Difficulty, gameType: GameType) {
     this.canvas = canvas;
     this.difficulty = difficulty;
     this.gameType = gameType;
 
-    this.canvasWidth = window.innerWidth - borderThickness;
-    this.canvasHeight = window.innerHeight - borderThickness;
+    this.canvasWidth = window.innerWidth - gameBorderThickness;
+    this.canvasHeight = window.innerHeight - gameBorderThickness;
     this.canvas.height = this.canvasHeight;
     this.canvas.width = this.canvasWidth;
-    // this.lastFrameTime = new Date().getTime();
     this.gameState = 'playing';
     this.entities = this.createEntities();
-    this.gameTime = { start: new Date().getTime(), end: null };
+    this.gameTime = { start: new Date().getTime(), end: Infinity };
 
     const ctx = this.canvas.getContext('2d');
     if (!ctx) throw new Error('No canvas');
@@ -81,10 +58,11 @@ export class Game {
     this.goalImage.src = chest;
     this.player = this.getPlayer(); // player starting location
     this.image.onload = () => (this.imageLoaded = true);
+    if (this.gameType === 'bugs') this.crown = new Crown(this.canvas);
 
     window.addEventListener('resize', () => {
-      this.canvasWidth = window.innerWidth - borderThickness;
-      this.canvasHeight = window.innerHeight - borderThickness;
+      this.canvasWidth = window.innerWidth - gameBorderThickness;
+      this.canvasHeight = window.innerHeight - gameBorderThickness;
       this.canvas.width = this.canvasWidth;
       this.canvas.height = this.canvasHeight;
     });
@@ -116,18 +94,44 @@ export class Game {
   }
 
   showGameOverScreen() {
+    if (!finalScreen) return;
+
+    const gameTimeNum = this.gameTime.end - this.gameTime.start;
+    const gameTimeText = msToText(gameTimeNum);
+
+    finalScreen.style.display = 'flex';
+
+    finalScreen.querySelector<HTMLHeadingElement>('#title')!.textContent =
+      this.gameState === 'lost' ? 'You Lost 😞' : 'You Win 🥇';
+
+    finalScreen.querySelector<HTMLSpanElement>('#score')!.textContent = gameTimeText;
+
     if (this.gameState === 'won') {
-      winScreen.style.display = 'flex';
-    } else {
-      deadScreen.style.display = 'flex';
+      const key = this.gameType === 'bugs' ? HIGH_SCORE_BUGS : HIGH_SCORE_GEMS;
+      const pbTimeStr = window.localStorage.getItem(key);
+      const pbTime = pbTimeStr ? parseInt(pbTimeStr) : null;
+
+      const isNewRecord = pbTime === null || gameTimeNum < pbTime;
+
+      const header = finalScreen.querySelector('#high-score-header');
+      const highScore = finalScreen.querySelector('#high-score');
+
+      if (isNewRecord) {
+        window.localStorage.setItem(key, gameTimeNum.toString());
+        header!.textContent = 'New High Score!:';
+        highScore!.textContent = gameTimeText;
+      } else if (pbTime !== null) {
+        header!.textContent = 'High Score:';
+        highScore!.textContent = msToText(pbTime);
+      }
     }
   }
 
   updateTime() {
     const timeNow = new Date().getTime();
     this.gameTime = { ...this.gameTime, end: timeNow };
-    const time = msToSec(timeNow - this.gameTime.start);
-    timer.innerText = time;
+    const timeText = msToText(timeNow - this.gameTime.start);
+    timer.innerText = timeText;
   }
 
   addBackground() {
@@ -137,29 +141,12 @@ export class Game {
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  addCrown() {
-    const scale = 1.4;
-    const crownWidth = 16;
-    const crownHeight = 14;
-    this.ctx.drawImage(
-      this.goalImage,
-      0,
-      0,
-      crownWidth,
-      crownHeight,
-      this.canvas.width - crownWidth * scale,
-      this.canvas.height - crownHeight * scale,
-      crownWidth * scale,
-      crownHeight * scale
-    );
-  }
-
   updateGameStatus(gameState: GameState) {
     this.gameState = gameState;
   }
 
   gameLoop = (_ts: number) => {
-    if (this.gameState === 'lost' || this.gameState === 'won') {
+    if (this.gameState !== 'playing') {
       this.showGameOverScreen();
       return;
     }
@@ -167,11 +154,12 @@ export class Game {
 
     this.updateTime();
     this.addBackground();
-    if (this.gameType === 'bugs') this.addCrown();
+    if (this.gameType === 'bugs' && this.crown) {
+      if (this.crown.checkCollision(this.player)) this.updateGameStatus('won');
+      this.crown.draw(this.ctx);
+    }
 
-    // let bugLocations: Array<{ x: number; y: number; height: number; width: number }> = [];
     this.entities.forEach((entity) => {
-      // bugLocations.push({ x: entity.x, y: entity.y, width: entity.width, height: entity.height });
       entity.update(this.player, () => this.removeEntity(entity.id));
       entity.draw(this.ctx);
     });

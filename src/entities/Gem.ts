@@ -17,7 +17,7 @@ export class Gem extends BaseEntity {
 
   update(player: BugGamePlayer, removeEntity: () => void) {
     if (this.checkCollision(player)) {
-      player.updateHealth({ add: 5 });
+      player.updateHealth({ add: 3 });
       removeEntity();
       gemBar.value = player.health;
     }

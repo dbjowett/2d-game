@@ -32,8 +32,20 @@ export const addKeyboardListeners = () => {
   });
 };
 
-export const msToSec = (ms: number) => {
+export const msToText = (ms: number | null): string => {
+  // returns ex: 01:21
+  if (!ms) return '00:00';
   const minutes = Math.floor(ms / 60000);
   const seconds = Number(((ms % 60000) / 1000).toFixed(0));
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+};
+
+export const secToMs = (sec: number): number => sec * 1000;
+
+export const parseStringNum = (num: string): number => {
+  // receives ex: 01:21 (len = 5)
+  if (!num || !num.includes(':') || num.length !== 5) return 0;
+
+  const [min, sec] = num.split(':');
+  return secToMs(parseInt(min) * 60 + parseInt(sec));
 };
