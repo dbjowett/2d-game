@@ -1,4 +1,4 @@
-import type { Difficulty, GameType } from '../main';
+import type { Difficulty, GameType } from '../types';
 
 export const gameBorderThickness = 200;
 

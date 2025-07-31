@@ -1,7 +1,8 @@
 import { difficultyMap, gameBorderThickness, playerStartingPoint } from '../constants';
-import type { Difficulty, GameType } from '../main';
+
 import chest from '../sprites/chest.png';
 import grass from '../sprites/grass.png';
+import type { Difficulty, GameType } from '../types';
 import { msToText } from '../utils';
 import { BugGamePlayer } from './BugGamePlayer';
 import { Crown } from './Crown';
