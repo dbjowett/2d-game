@@ -13,6 +13,7 @@ export const hideInitialUi = (gameType: GameType) => {
     .querySelectorAll('.start-ui-container')
     .forEach((ui) => ((ui as HTMLElement).style.display = 'none'));
 };
+
 export const keys = {
   ArrowLeft: false,
   ArrowRight: false,

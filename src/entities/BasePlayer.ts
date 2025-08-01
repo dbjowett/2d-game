@@ -51,27 +51,26 @@ export abstract class BasePlayer {
   // updates the player location and prevents them from falling off
   update(canvas: HTMLCanvasElement) {
     this.isMoving = false;
-    // TODO: fix arbitrary numbers for walls
     if (keys['ArrowLeft']) {
-      if (this.x - this.frameWidth / 2 <= -6) return;
+      if (this.x <= 0) return; // left wall
       this.x -= this.speed;
       this.direction = Direction['Left'];
       this.isMoving = true;
     }
     if (keys['ArrowRight']) {
-      if (this.x + this.frameWidth / 2 >= canvas.width - 12) return;
+      if (this.x + this.renderWidth >= canvas.width) return; // right wall
       this.x += this.speed;
       this.direction = Direction['Right'];
       this.isMoving = true;
     }
     if (keys['ArrowUp']) {
-      if (this.y + this.frameHeight / 2 <= 8) return;
+      if (this.y <= 0) return; // top wall
       this.y -= this.speed;
       this.direction = Direction['Up'];
       this.isMoving = true;
     }
     if (keys['ArrowDown']) {
-      if (this.y + this.frameHeight >= canvas.height - 12) return;
+      if (this.y + this.renderHeight >= canvas.height) return; //bottom wall
       this.y += this.speed;
       this.direction = Direction['Down'];
       this.isMoving = true;

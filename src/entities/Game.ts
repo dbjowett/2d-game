@@ -66,6 +66,7 @@ export class Game {
       this.canvasHeight = window.innerHeight - gameBorderThickness;
       this.canvas.width = this.canvasWidth;
       this.canvas.height = this.canvasHeight;
+      // handle resize
     });
   }
 
