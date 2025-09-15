@@ -1,8 +1,7 @@
-# 🎮 Whoyaho Coding Test
-
 ⚡️ [View Live](https://2dgame.danieljowett.com)
 
 ### Deployed via AWS
+
 - Github Actions
 - S3
 - Cloudfront
@@ -33,7 +32,7 @@ pnpm run dev
 
 ### ⚠️ Using `npm` instead of `pnpm`? ⚠️
 
-If you are using`npm`, you'll need to delete the `pnpm-lock.yaml` file:
+If you are using `npm`, you'll need to delete the `pnpm-lock.yaml` file:
 
 ```bash
 rm pnpm-lock.yaml
@@ -58,15 +57,6 @@ npm run dev
 
 ---
 
-## 💡 Notes
-
-- sharon@whoyaho.com
-- circlestone@whoyaho.com
-- mincheol@whoyaho.com
-- ceo@whoyaho.com
-
----
-
 ## 📬 Inquiries
 
 If you have any questions about the project, please feel free to contact me.
@@ -74,5 +64,3 @@ If you have any questions about the project, please feel free to contact me.
 - Email: [dbjowett@gmail.com](mailto:dbjowett@gmail.com)
 - LinkedIn: [linkedin.com/in/danieljowett](https://linkedin.com/in/danieljowett)
 - Github: [github.com/dbjowett](https://github.com/dbjowett)
-
-Thank you 🙏

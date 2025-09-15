@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/style.css" />
 
-    <title>Whoayo Games</title>
+    <title>2D Canvas Games</title>
   </head>
   <body>
     <!-- START UI -->
@@ -102,24 +102,24 @@
 
     <script type="module" src="/src/main.ts"></script>
     <script>
-      const DIFF_KEY = 'selected-difficulty';
-      const select = document.getElementById('difficulty-select');
-      const btns = document.querySelectorAll('.start-btn');
+      const DIFF_KEY = "selected-difficulty";
+      const select = document.getElementById("difficulty-select");
+      const btns = document.querySelectorAll(".start-btn");
 
       const setDifficulty = (diff) => {
-        btns.forEach((btn) => btn.setAttribute('data-difficulty', diff));
+        btns.forEach((btn) => btn.setAttribute("data-difficulty", diff));
         select.value = diff;
       };
 
       window.onload = () => {
         const userDifficulty = window.localStorage.getItem(DIFF_KEY);
         if (!btns || !select) return;
-        setDifficulty(userDifficulty || 'hard');
-        select.style.display = 'block';
+        setDifficulty(userDifficulty || "hard");
+        select.style.display = "block";
       };
 
       if (select) {
-        select.addEventListener('change', (e) => {
+        select.addEventListener("change", (e) => {
           if (!btns || !select) return;
           setDifficulty(e.target.value);
           window.localStorage.setItem(DIFF_KEY, e.target.value);
